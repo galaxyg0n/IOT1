@@ -1,0 +1,13 @@
+# Allow all to read from the topic 
+topic read sensors/+/data
+
+# Allow 1 user to pub/sub
+user god
+topic readwrite /sensors/+/data
+
+# Allow user to puv on /sensor/temperature/data
+user peasant1
+topic readwrite /sensor/temperature/data
+
+# Allow all users to pub on their own topic
+pattern readwrite /sensors/%u/+/data
