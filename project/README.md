@@ -22,7 +22,7 @@ The first RPI will be in control of the sensors close to the plants. Here there 
 The second RPI will be in control of the general environment of the greenhouse. It will hold the air quality sensor and the sun light sensor.
 
 ### RPI3 - (black)
-The third and last RPI will be in charge of the communication and logic. It will act as the broker for MQTT. 
+The third and last RPI will be in charge of the communication and logic. It will act as the broker for MQTT. This will subscribe to all sensors and collect the data.
 
 ## Sensors
 - Temperature/Humidity Sensor
@@ -32,3 +32,20 @@ The third and last RPI will be in charge of the communication and logic. It will
 ## Actuators
 - "Fan"
 
+
+## Extra
+Pre-gen divs
+```
+<div id="sensor-data-container">
+    {% for topic in known_topics %}
+        {% set element_id = topic.replace('/', '_') %}
+        {% set topic_label = topic.split('/')[-1].replace('_', ' ').upper() %}
+
+        <div class="sensor-card">
+            <p>{{ topic_label }}</p>
+            
+            <span id="{{ element_id }}" class="sensor-value">Waiting for data...</span>
+        </div>
+    {% endfor %}
+</div>
+```

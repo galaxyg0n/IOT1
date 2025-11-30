@@ -1,20 +1,56 @@
+# For Flask
+from flask import Flask, render_template
+from flask_socketio import SocketIO
+
+# For MQTT
 from paho.mqtt import client as mqtt_client
 import random
 import time
 
+# Other stuff
+from termcolor import colored
+
+# --- Flask and SocketIO Setup ---
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'very_safe_key123'
+socketio = SocketIO(app, message_queue='redis://localhost:6379')
+
+# --- MQTT Setup ---
 broker = "localhost"
 port = 1883
-topic = "python/mqtt"
-client_id = f'python-mqtt-{random.randint(0, 1000)}'
+topics_to_sub = [
+    "sensors/moisture/#",
+    "sensors/temperature/#",
+    "sensors/humidity/#"
+]
+
+client_id = f'sensor-mqtt-{random.randint(0, 1000)}'
+mqtt_client_instance = None
 
 
+def on_message(client, userdate, msg):
+    topic = msg.topic
+    
+    payload = msg.payload.decode()
+    print(colored(f'[MQTT] - Recieved: `{payload}` from `{topic}`... Pushing to WebSockets...', "green"))
 
-def connect_mqtt():
+    socketio.emit(
+        'new_sensor_data',
+        {'topic': topic, 'value': payload}
+    )
+
+def connect_and_sub_mqtt():
+    global mqtt_client_instance
+
     def on_connect(client, userdata, flags, reason_code, properties):
         if reason_code == 0:
-            print("[x] - Connected to MQTT Broker!")
+            print(colored("[x] - Connected to MQTT Broker!", "blue"))
+
+            for topic in topics_to_sub:
+                client.subscribe(topic)
+            print(colored("[X] - Subscribed to topics", "blue"))
         else:
-            print("[!] - Failed to connect to MQTT Broker!")
+            print(colored("[!] - Failed to connect to MQTT Broker!", "red"))
 
     
     client = mqtt_client.Client(
@@ -23,23 +59,35 @@ def connect_mqtt():
     )
 
     client.on_connect = on_connect
-    client.connect(broker, port)
-    return client
+    client.on_message = on_message
+
+    try:
+        client.connect(broker, port)
+        client.loop_start()
+        mqtt_client_instance = client
+
+    except Exception as e:
+        print(colored(f'[!] - Exception during MQTT connection: {e}', "red"))
 
 
-def subscribe(client: mqtt_client):
-    def on_message(client, userdate, msg):
-        print(f'Recieved: `{msg.payload.decode()}` from `{msg.topic}`')
+## ------------ Flask section ------------
+@app.route('/')
+def index():
+    return render_template('index.html', known_topics=topics_to_sub)
 
-    client.subscribe(topic)
-    client.on_message = on_message 
 
-def run():
-    client = connect_mqtt()
-    subscribe(client)
-    client.loop_forever()
-    
+@socketio.on('connect')
+def connect_handler():
+    print(colored("[X] - Client connected to WebSocket!", "blue"))
+
+
+@socketio.on('disconnect')
+def disconnect_handler():
+    print(colored("[X] - Client disconnected to WebSocket!", "blue"))
+
 
 
 if __name__ == "__main__":
-    run()
+    client = connect_and_sub_mqtt()
+
+    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)

@@ -4,8 +4,10 @@ import time
 
 broker = "localhost"
 port = 1883
-topic = "python/mqtt"
-client_id = f'python-mqtt-{random.randint(0, 1000)}'
+client_id = f'sensor-{random.randint(0, 1000)}'
+moisture_topic = f'sensors/moisture/{client_id}'
+temp_topic     = f'sensors/temperature/{client_id}'
+humidity_topic = f'sensors/humidity/{client_id}'
 
 
         
@@ -29,19 +31,27 @@ def connect_mqtt():
 
 
 def publish(client):
+    topics = [moisture_topic, temp_topic, humidity_topic]
     msg_count = 1
+
     while True:
         time.sleep(1)
-        msg = f'message: {msg_count}'
-        info = client.publish(topic, msg)
+        msg = f'message: {msg_count + random.randint(0, 1000)}'
 
-        if info.rc == mqtt_client.MQTT_ERR_SUCCESS:
-            print(f'[x] - Send `{msg}` to topic `{topic}`')
-        else:
-            print(f'[!] - Failed to send message to topic `{topic}`')
+        publish_results = {}
+
+        for topic in topics:
+            info = client.publish(topic, msg)
+            publish_results[topic] = info
+
+        for topic, info in publish_results.items():
+            if info.rc == mqtt_client.MQTT_ERR_SUCCESS:
+                print(f'[x] - Send `{msg}` to topic `{topic}`')
+            else:
+                print(f'[!] - Faild to send message to topic `{topic}`')
+
 
         msg_count += 1
-
         if msg_count > 5:
             break
 
