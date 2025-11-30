@@ -42,7 +42,6 @@ Activate it
 ```
 . .venv/bin/activate (linux)
 .\.venv\Scripts\Activate.ps1 (Powershell)
-
 ```
 
 Install packages
