@@ -1,6 +1,7 @@
 # IOT project
-
 Smart Greenhouse / Terrarium Network 
+
+![Interface](image.png)
 
 Concept: Create a self-regulating miniature ecosystem distributed across three zones (the Pis).
 
@@ -42,7 +43,6 @@ Activate it
 ```
 . .venv/bin/activate (linux)
 .\.venv\Scripts\Activate.ps1 (Powershell)
-
 ```
 
 Install packages
