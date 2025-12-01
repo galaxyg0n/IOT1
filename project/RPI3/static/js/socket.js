@@ -1,11 +1,15 @@
-// 1. Connect to the SocketIO server
+// Connect to the SocketIO server
 var socket = io();
 
+// Get the existing <div> from the webpage
 const container = document.getElementById('sensor-data-container');
 
-
+/* Creates the sensor group containers with the sensor card elements in them 
+*  for displaying in a grid format on the webpage
+*/
 function create_topic_elements(topic)
 {
+    // Splits the topic (sensor/<type>/id) into 3 different variables
     const parts      = topic.split('/');
     const sensorType = parts[1].toUpperCase();
     const sensorID   = parts[2].split('-').pop();
@@ -15,6 +19,7 @@ function create_topic_elements(topic)
     
     let groupContainer = document.getElementById(group_id);
 
+    // If the container doesn't already exist then create a new grop container
     if (!groupContainer)
     {
         console.log(`[DOM] - Creating new group container for ID: ${sensorID}`);
@@ -28,6 +33,7 @@ function create_topic_elements(topic)
 
     var target_element = document.getElementById(element_id);
 
+    // If the sensor card doesn't already exist this creates it 
     if(!target_element)
     {
         console.log(`[DOM] - Creating new element for topic: ${topic}`);

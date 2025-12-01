@@ -11,7 +11,8 @@ humidity_topic = f'sensors/humidity/{client_id}'
 
 
         
-
+# Connects the publisher (sensor controller) to the MQTT broker running as a
+# systemctl service on the server RPI. This is the same setup as from server.py
 def connect_mqtt():
     def on_connect(client, userdata, flags, reason_code, properties):
         if reason_code == 0:
@@ -30,10 +31,13 @@ def connect_mqtt():
     return client
 
 
+# Handles publishing to the MQTT broker from the sensor controller. Right now
+# it publishes random sensor data for testing
 def publish(client):
     topics = [moisture_topic, temp_topic, humidity_topic]
     msg_count = 1
 
+    # Here the real sensor reading would get implemented
     while True:
         time.sleep(1)
         msg = f'message: {msg_count + random.randint(0, 1000)}'
