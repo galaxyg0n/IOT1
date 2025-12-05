@@ -19,10 +19,10 @@ Scalability: Easily add more "zones" (new Pis) or more types of sensors (e.g., p
 ### RPI 1 - 172.16.33.31 (red)
 The first RPI will be in control of the sensors close to the plants. Here there will be a soil moisture, a Temperature and a Humidity sensor.
 
-### RPI2 - 172.16.33.31 (purple)
+### RPI2 - 172.16.33.32 (purple)
 The second RPI will be in control of the general environment of the greenhouse. It will hold the air quality sensor and the sun light sensor.
 
-### RPI3 - (black)
+### RPI3 - 172.16.33.25 (black)
 The third and last RPI will be in charge of the communication and logic. It will act as the broker for MQTT. This will subscribe to all sensors and collect the data.
 
 ## Sensors
