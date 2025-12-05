@@ -1,0 +1,40 @@
+import requests
+
+url = 'https://iot-worker.mathiasen-simon.workers.dev'
+#url = 'http://localhost:8787'
+
+json_payload = {
+    "greenhouse-1" : {
+        "rpi-1" : {
+            "temp_celsius": 24.5,
+            "humidity_percent": 65.2,
+            "soil_moisture": 450
+           
+        },
+        "rpi-2" : {
+            "air_quality": "Good",
+            "light_level": 65.2
+        }
+
+    },
+
+    "greenhouse-2" : {
+        "rpi-1" : {
+            "temp_celsius": 30.5,
+            "humidity_percent": 25.2,
+            "soil_moisture": 850
+        },
+        "rpi-2" : {
+            "air_quality": "Bad",
+            "light_level": 15.2
+        }
+    }
+}
+
+headers = {
+    "Content-Type": "application/json"
+}
+
+res = requests.post(url, headers=headers, json=json_payload)
+print(res.content)
+

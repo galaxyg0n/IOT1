@@ -50,20 +50,49 @@ Install packages
 pip3 install -r requirements.txt
 ```
 
+## Structure so far
+### Cloudflare workers
+We have 2 Cloudflare workers running at the moment, one is in charge of inserting data into the database from the server running on RPI3. The second worker is in charge of getting the data from the database for displaying on the website running in a container on Google cloud
 
-## Extra
-Pre-gen divs
+#### iot-worker
+The iot-worker (https://iot-worker.mathiasen-simon.workers.dev) is the worker that takes a body of data from the server running on the RPI3. The body of the data should look something like this:
 ```
-<div id="sensor-data-container">
-    {% for topic in known_topics %}
-        {% set element_id = topic.replace('/', '_') %}
-        {% set topic_label = topic.split('/')[-1].replace('_', ' ').upper() %}
+{
+    "greenhouse-1" : {
+        "rpi-1" : {
+            "temp_celsius": 24.5,
+            "humidity_percent": 65.2,
+            "soil_moisture": 450
+           
+        },
+        "rpi-2" : {
+            "air_quality": "Good",
+            "light_level": 65.2
+        }
 
-        <div class="sensor-card">
-            <p>{{ topic_label }}</p>
-            
-            <span id="{{ element_id }}" class="sensor-value">Waiting for data...</span>
-        </div>
-    {% endfor %}
-</div>
+    },
+
+    "greenhouse-2" : {
+        "rpi-1" : {
+            "temp_celsius": 30.5,
+            "humidity_percent": 25.2,
+            "soil_moisture": 850
+        },
+        "rpi-2" : {
+            "air_quality": "Bad",
+            "light_level": 15.2
+        }
+    }
+}
 ```
+Here we can dynamically add more greenhouses by adding more blocks. These blocks of sensor reading are constructed on the RPI3.
+
+#### db-worker
+The db-worker is very simple it just fetches the data from the D1 database and returns it as a JSON body for the Flask server running in the container to parse and display on a website.
+
+### Container
+There is 1 container running in Google cloud which is the web interface that displays the sensor data and such to the user. This is a simple Flask server that just calls the db-worker to get the most recent data, or in case of analytics a history of data.
+
+### D1 Database
+There is 1 D1 database running on Cloudflare which stores all the reading from the sensors, in theory this should store all of the history but I don't want to pay for storage so we just use basic examples to showcase.
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time Sensor Dashboard</title>
+
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='index.css') }}"
+        />
+</head>
+<body>
+    
+    <div class="main-container">
+        <h1>Live Sensor Readings</h1>
+
+        <div id="sensor-data-container">
+            {% for greenhouse, devices in grouped.items() %}
+                <h2>{{ greenhouse }}</h2>
+                {% for device, readings in devices.items() %}
+                    <h3>{{ device }}</h3>
+                    <ul>
+                    {% for reading in readings %}
+                        <li>{{ reading.timestamp }}: 
+                            {% for type, value in reading.sensors.items() %}
+                                {{ type }} = {{ value }}
+                            {% endfor %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
+    <!--<script src="{{ url_for('static', filename='js/socket.js') }}"></script>-->
+</body>
+</html>
