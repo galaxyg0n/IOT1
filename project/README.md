@@ -88,7 +88,7 @@ The iot-worker (https://iot-worker.mathiasen-simon.workers.dev) is the worker th
 Here we can dynamically add more greenhouses by adding more blocks. These blocks of sensor reading are constructed on the RPI3.
 
 #### db-worker
-The db-worker (db-worker.mathiasen-simon.workers.dev) is very simple it just fetches the data from the D1 database and returns it as a JSON body for the Flask server running in the container to parse and display on a website.
+The db-worker (https://db-worker.mathiasen-simon.workers.dev/) is very simple it just fetches the data from the D1 database and returns it as a JSON body for the Flask server running in the container to parse and display on a website.
 
 ### Container
 There is 1 container (https://iot-server-149967229252.europe-west1.run.app/) running in Google cloud which is the web interface that displays the sensor data and such to the user. This is a simple Flask server that just calls the db-worker to get the most recent data, or in case of analytics a history of data.
