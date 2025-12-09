@@ -1,7 +1,7 @@
 # IOT project
 Smart Greenhouse / Terrarium Network 
 
-![Interface](image.png)
+![Interface](system-structure.png)
 
 Concept: Create a self-regulating miniature ecosystem distributed across three zones (the Pis).
 
