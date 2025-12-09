@@ -1,9 +1,9 @@
 # IOT project
-Smart Greenhouse / Terrarium Network 
+This project is an attempt at implementing a simple smart greenhouse solution using 3 Raspberry Pis and some GroovePi sensors.
 
 ![Interface](system-structure.png)
 
-Concept: Create a self-regulating miniature ecosystem distributed across three zones (the Pis).
+
 
 Pi Roles:
 
@@ -11,7 +11,7 @@ Pi Roles:
 
     Pi 2 (Air & Light Station): Uses Air Quality Sensor and Light Sensor. Publishes atmospheric data.
 
-    Pi 3 (Control & Broker): Runs the Mosquitto MQTT Broker, subscribes to all sensor data, and uses a Relay to control a simulated device (e.g., a fan or pump connected to the relay) based on thresholds from Pi 1 and Pi 2.
+    Pi 3 (Control & Broker): Runs the Mosquitto MQTT Broker, subscribes to all sensor data, and talks with and API to POST the data into a database
 
 Scalability: Easily add more "zones" (new Pis) or more types of sensors (e.g., pH, UV) to the system without changing the central control logic.
 
@@ -27,7 +27,8 @@ The third and last RPI will be in charge of the communication and logic. It will
 
 ## Sensors
 - Temperature/Humidity Sensor
-- Air pressure Sensor
+- Soil moisture
+- Air quality
 - Light Sensor
 
 ## Actuators
