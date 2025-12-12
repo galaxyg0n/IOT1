@@ -31,22 +31,6 @@ The third and last RPI will be in charge of the communication and logic. It will
 - Air quality
 - Light Sensor
 
-# Setup
-Create a general python venv in root folder of project
-```
-python3 -m venv .venv
-```
-
-Activate it 
-```
-. .venv/bin/activate (linux)
-.\.venv\Scripts\Activate.ps1 (Powershell)
-```
-
-Install packages
-```
-pip3 install -r requirements.txt
-```
 
 ## Structure so far
 ### Cloudflare workers
