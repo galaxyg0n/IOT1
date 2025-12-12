@@ -31,9 +31,6 @@ The third and last RPI will be in charge of the communication and logic. It will
 - Air quality
 - Light Sensor
 
-## Actuators
-- "Fan"
-
 # Setup
 Create a general python venv in root folder of project
 ```
